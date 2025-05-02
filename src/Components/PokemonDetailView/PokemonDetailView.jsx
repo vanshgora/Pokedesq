@@ -71,6 +71,14 @@ const PokemonDetailView = () => {
 
   if (!pokemon) return null;
 
+  // Find current evolution stage
+  const getCurrentEvolutionStage = () => {
+    if (!pokemon.evolution_chain) return -1;
+    return pokemon.evolution_chain.findIndex(evo => evo.id === pokemon.id);
+  };
+
+  const currentEvolutionStage = getCurrentEvolutionStage();
+
   return (
     <div className="container mx-auto p-4">
       <div className="bg-white rounded-lg shadow overflow-hidden">
@@ -239,29 +247,113 @@ const PokemonDetailView = () => {
           {activeTab === "evolution" && (
             <div>
               <h2 className="text-xl font-semibold mb-4">Evolution Chain</h2>
-              {pokemon.evolution_chain ? (
-                <div className="flex flex-wrap justify-center gap-4">
-                  {pokemon.evolution_chain.map((evo, index) => (
-                    <div key={evo.id} className="text-center">
-                      {index > 0 && (
-                        <div className="text-gray-400 my-2">→</div>
-                      )}
-                      <Link 
-                        to={`/pokemon/${evo.id}`}
-                        className="block p-4 bg-gray-50 rounded-lg hover:bg-gray-100"
-                      >
-                        <img 
-                          src={evo.image || "/api/placeholder/96/96"} 
-                          alt={evo.name}
-                          className="w-24 h-24 mx-auto" 
-                        />
-                        <div className="mt-2 font-medium">{formatName(evo.name)}</div>
-                      </Link>
+              {pokemon.evolution_chain && pokemon.evolution_chain.length > 0 ? (
+                <div className="flex flex-col items-center">
+                  {/* Evolution chain visualization */}
+                  <div className="flex flex-wrap justify-center gap-2 md:gap-4 w-full">
+                    {pokemon.evolution_chain.map((evo, index) => (
+                      <div key={evo.id} className="flex flex-col items-center">
+                        {/* Arrow showing evolution direction */}
+                        {index > 0 && (
+                          <div className="flex items-center justify-center my-2 md:my-4 w-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" 
+                              stroke="currentColor" className="h-6 w-6 text-gray-400">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                            </svg>
+                            {evo.evolution_details && (
+                              <div className="text-xs text-gray-500 ml-1">
+                                {evo.evolution_details.min_level ? 
+                                  `Lv. ${evo.evolution_details.min_level}` : 
+                                  evo.evolution_details.trigger || ''}
+                              </div>
+                            )}
+                          </div>
+                        )}
+                        
+                        {/* Pokémon card */}
+                        <Link 
+                          to={`/pokemon/${evo.id}`}
+                          className={`block p-4 rounded-lg transition-all duration-200 
+                            ${evo.id === pokemon.id 
+                              ? 'bg-blue-50 border-2 border-blue-300 shadow-md transform scale-105' 
+                              : 'bg-gray-50 hover:bg-gray-100'}`}
+                        >
+                          <img 
+                            src={evo.image || "/api/placeholder/96/96"} 
+                            alt={evo.name}
+                            className="w-20 h-20 md:w-24 md:h-24 mx-auto object-contain" 
+                          />
+                          <div className="mt-2 font-medium text-center">
+                            {formatName(evo.name)}
+                          </div>
+                          {evo.id === pokemon.id && (
+                            <div className="mt-1 text-xs text-blue-600 text-center">Current</div>
+                          )}
+                        </Link>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  {/* Evolution details section */}
+                  {currentEvolutionStage >= 0 && (
+                    <div className="mt-8 w-full max-w-2xl">
+                      <h3 className="text-lg font-medium mb-3 text-gray-700">Evolution Details</h3>
+                      <div className="bg-gray-50 p-4 rounded-lg">
+                        {currentEvolutionStage === 0 ? (
+                          <div className="text-gray-600">
+                            {pokemon.evolution_chain.length > 1 ? (
+                              <>
+                                <p className="mb-2">This is the base form in its evolution chain.</p>
+                                <p>It evolves into {formatName(pokemon.evolution_chain[1]?.name || '')} 
+                                  {pokemon.evolution_chain[1]?.evolution_details?.min_level ? 
+                                    ` at level ${pokemon.evolution_chain[1].evolution_details.min_level}` : 
+                                    pokemon.evolution_chain[1]?.evolution_details?.trigger ? 
+                                      ` via ${pokemon.evolution_chain[1].evolution_details.trigger}` : 
+                                      ''}.</p>
+                              </>
+                            ) : (
+                              <p>This Pokémon does not evolve.</p>
+                            )}
+                          </div>
+                        ) : currentEvolutionStage === pokemon.evolution_chain.length - 1 ? (
+                          <div className="text-gray-600">
+                            <p className="mb-2">This is the final form in its evolution chain.</p>
+                            <p>It evolved from {formatName(pokemon.evolution_chain[currentEvolutionStage - 1]?.name || '')}
+                              {pokemon.evolution_details?.min_level ? 
+                                ` at level ${pokemon.evolution_details.min_level}` : 
+                                pokemon.evolution_details?.trigger ? 
+                                  ` via ${pokemon.evolution_details.trigger}` : 
+                                  ''}.</p>
+                          </div>
+                        ) : (
+                          <div className="text-gray-600">
+                            <p className="mb-2">This is an intermediate form in its evolution chain.</p>
+                            <p className="mb-2">It evolved from {formatName(pokemon.evolution_chain[currentEvolutionStage - 1]?.name || '')}
+                              {pokemon.evolution_details?.min_level ? 
+                                ` at level ${pokemon.evolution_details.min_level}` : 
+                                pokemon.evolution_details?.trigger ? 
+                                  ` via ${pokemon.evolution_details.trigger}` : 
+                                  ''}.</p>
+                            <p>It evolves into {formatName(pokemon.evolution_chain[currentEvolutionStage + 1]?.name || '')}
+                              {pokemon.evolution_chain[currentEvolutionStage + 1]?.evolution_details?.min_level ? 
+                                ` at level ${pokemon.evolution_chain[currentEvolutionStage + 1].evolution_details.min_level}` : 
+                                pokemon.evolution_chain[currentEvolutionStage + 1]?.evolution_details?.trigger ? 
+                                  ` via ${pokemon.evolution_chain[currentEvolutionStage + 1].evolution_details.trigger}` : 
+                                  ''}.</p>
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  ))}
+                  )}
                 </div>
               ) : (
-                <p className="text-center text-gray-500">Evolution data not available</p>
+                <div className="text-center p-6 bg-gray-50 rounded-lg">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 mx-auto text-gray-400 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <p className="text-gray-500 mb-2">Evolution data not available</p>
+                  <p className="text-sm text-gray-400">This may be due to incomplete data or because this Pokémon doesn't evolve.</p>
+                </div>
               )}
             </div>
           )}

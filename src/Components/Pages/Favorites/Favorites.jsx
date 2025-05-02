@@ -1,15 +1,18 @@
 import { useEffect, useState } from "react";
 import PokemonCard from "../../Common/PokemonCard/PokemonCard";
 import { getFavoritePokemon } from "../../../Services/FavoritesService";
+import usePokemonContext from "../../../Hooks/usePokemonContext";
 
 const Favorites = () => {
+  const { state } = usePokemonContext();
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   
-  const loadFavorites = async () => {
+  const loadFavorites = () => {
     try {
       setLoading(true);
+      // Get favorite IDs from your existing service
       const favoriteIds = getFavoritePokemon();
       
       if (favoriteIds.length === 0) {
@@ -18,18 +21,43 @@ const Favorites = () => {
         return;
       }
 
-      const pokemonNames = await fetchPokemonNames(favoriteIds);
-      setFavorites(pokemonNames);
-      setLoading(false);
+      // Instead of fetching from API, use the context data
+      if (state.allPokemons.length > 0) {
+        // Find matching Pokemon names from context based on IDs
+        const favoritePokemonNames = favoriteIds.map(id => {
+          // Find the Pokemon in context by ID
+          const pokemon = state.allPokemons.find(p => {
+            // Get ID either from details or from URL
+            const pokemonId = p.details?.id || parseInt(p.url?.split('/').filter(Boolean).pop());
+            return pokemonId === parseInt(id);
+          });
+          
+          return pokemon ? pokemon.name : `unknown-${id}`;
+        });
+        
+        setFavorites(favoritePokemonNames);
+        setLoading(false);
+      } else {
+        // If context data isn't loaded yet, fall back to original method
+        fetchPokemonNames(favoriteIds)
+          .then(pokemonNames => {
+            setFavorites(pokemonNames);
+            setLoading(false);
+          })
+          .catch(err => {
+            setError(err.message);
+            setLoading(false);
+          });
+      }
     } catch (err) {
       setError(err.message);
       setLoading(false);
     }
   };
   
+  // Keep the original fetch method as fallback
   const fetchPokemonNames = async (ids) => {
     try {
-      
       const promises = ids.map(id => 
         fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)
           .then(response => {
@@ -50,20 +78,17 @@ const Favorites = () => {
     }
   };
   
-
   useEffect(() => {
     loadFavorites();
     
-    
     window.addEventListener('storage', handleStorageChange);
-    
     window.addEventListener('focus', loadFavorites);
     
     return () => {
       window.removeEventListener('storage', handleStorageChange);
       window.removeEventListener('focus', loadFavorites);
     };
-  }, []);
+  }, [state.allPokemons]); // Added state.allPokemons as dependency to update when it changes
   
   const handleStorageChange = (event) => {
     if (event.key === 'favorite_pokemon') {
@@ -75,7 +100,7 @@ const Favorites = () => {
     loadFavorites();
   };
   
-  if (loading) {
+  if (loading && state.allPokemons.length === 0) {
     return (
       <div className="container mx-auto p-4">
         <h1 className="text-2xl font-bold mb-6">My Favorite Pokémon</h1>
