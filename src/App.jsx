@@ -1,17 +1,29 @@
 import './App.css'
-import Header from './Components/Header/Header'
 import { getInitialPokemons } from './Services/PokeApi'
-import PokemonCardGallery from './Components/PokemonCardGallery/PokemonCardGallery'
+import usePokmonContext from './Hooks/usePokemonContext'
+import { useEffect } from 'react'
+import AppRouter from "./AppRouter.jsx";
 
 
 function App() {
  
+  const { dispatch } = usePokmonContext();
+
+  useEffect(() => {
+      async function fetchPokemons() {
+        const pokemonsData = await getInitialPokemons();
+        console.log(pokemonsData);
+        dispatch({
+          type: "SET_INITIAL_DATA",
+          payload: pokemonsData
+        });
+      }
+      
+      fetchPokemons();
+  }, []);
 
   return (
-    <>
-      <Header/>
-      <PokemonCardGallery/>
-    </>
+    <AppRouter/>
   )
 }
 

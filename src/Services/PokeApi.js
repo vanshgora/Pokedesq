@@ -3,7 +3,17 @@ import axios from "axios";
 const getInitialPokemons = async () => {
   try {
     const res = await axios.get("https://pokeapi.co/api/v2/pokemon?limit=150");
-    return res.data;
+    const results = res.data.results;
+    
+    if(results && results.length) {
+      for(let i = 0; i < results.length; i++) {
+        const details = await axios.get(`https://pokeapi.co/api/v2/pokemon/${results[i].name.toLowerCase()}`);
+        if (!details) throw new Error('Failed to fetch Pokémon');
+        results[i].details = details.data;
+      }
+    }
+
+    return results;
   } catch (error) {
     console.error("Error fetching initial Pokémon:", error);
   }
