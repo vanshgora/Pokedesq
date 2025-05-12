@@ -1,24 +1,50 @@
 import axios from "axios";
 
 const getInitialPokemons = async () => {
-  try {
-    const res = await axios.get("https://pokeapi.co/api/v2/pokemon?limit=150");
-    const results = res.data.results;
-    
-    if(results && results.length) {
-      for(let i = 0; i < results.length; i++) {
-        const details = await axios.get(`https://pokeapi.co/api/v2/pokemon/${results[i].name.toLowerCase()}`);
-        if (!details) throw new Error('Failed to fetch Pokémon');
-        results[i].details = details.data;
+  const query = `
+    query getPokemons {
+      pokemon_v2_pokemon(limit: 300) {
+      id
+        name
+        pokemon_v2_pokemontypes {
+          pokemon_v2_type {
+            name
+          }
+        }
       }
     }
+  `;
 
-    return results;
+  try {
+    const response = await axios.post(
+      'https://beta.pokeapi.co/graphql/v1beta',
+      {
+        query,
+        variables: null,
+        operationName: 'getPokemons'
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': '*/*'
+        }
+      }
+    );
+
+    const pokemons = response.data.data.pokemon_v2_pokemon.map(pokemon => ({
+      id: pokemon.id,
+      name: pokemon.name,
+      types: pokemon.pokemon_v2_pokemontypes.map(t => t.pokemon_v2_type.name)
+    }));
+
+
+    return pokemons;
   } catch (error) {
-    console.error("Error fetching initial Pokémon:", error);
+    console.error('Error fetching Pokémon:', error);
+    return [];
   }
-    
-}
+};
+
 
 const fetchPokemonService = async (pokemonName) => {
   try {

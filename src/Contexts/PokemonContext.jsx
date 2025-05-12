@@ -8,7 +8,6 @@ const initialValue = {
   pokemonsToDisplay: [],
   sortBy: 'id',           
   sortDirection: 'asc',
-  // Pagination related state
   currentPage: 1,
   itemsPerPage: 20,
   totalPages: 1
@@ -37,7 +36,7 @@ function filterPokemons(allPokemons, selectedTypes, searchQuery) {
   
   return allPokemons.filter(pokemon => {
     const typeMatch = selectedTypes.length === 0 || 
-      pokemon.details?.types.some(t => selectedTypes.includes(t.type.name));
+      pokemon.types.some(t => selectedTypes.includes(t));
 
     const queryMatch = searchQuery === '' || 
       pokemon.name.toLowerCase().includes(searchQuery.toLowerCase());
@@ -53,7 +52,7 @@ function pokemonReducer(state, action) {
       const typesSet = new Set();
       
       for(const pokemon of allPokemons) {
-        pokemon.details.types.forEach(type => typesSet.add(type.type.name));
+        pokemon.types.forEach(type => typesSet.add(type));
       }
       
       const sortedInitialPokemons = sortPokemons(allPokemons, state.sortBy, state.sortDirection);
@@ -82,7 +81,6 @@ function pokemonReducer(state, action) {
         ...state, 
         selectedTypes: newSelectedTypes, 
         pokemonsToDisplay: sortedFilteredByTypes,
-        // Reset to page 1 when filters change
         currentPage: 1
       };
       
@@ -97,7 +95,6 @@ function pokemonReducer(state, action) {
         ...state, 
         searchQuery: newSearchQuery, 
         pokemonsToDisplay: sortedFilteredBySearch,
-        // Reset to page 1 when search changes
         currentPage: 1
       };
       
@@ -137,8 +134,7 @@ function pokemonReducer(state, action) {
         sortDirection: newSortDirection,
         pokemonsToDisplay: directionSortedPokemons
       };
-    
-    // Pagination reducer cases
+  
     case "SET_CURRENT_PAGE":
       return {
         ...state,
@@ -149,7 +145,7 @@ function pokemonReducer(state, action) {
       return {
         ...state,
         itemsPerPage: action.payload,
-        currentPage: 1 // Reset to first page when changing items per page
+        currentPage: 1 
       };
       
     case "SET_TOTAL_PAGES":

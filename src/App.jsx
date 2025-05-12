@@ -12,7 +12,6 @@ function App() {
   useEffect(() => {
       async function fetchPokemons() {
         const pokemonsData = await getInitialPokemons();
-        console.log(pokemonsData);
         dispatch({
           type: "SET_INITIAL_DATA",
           payload: pokemonsData

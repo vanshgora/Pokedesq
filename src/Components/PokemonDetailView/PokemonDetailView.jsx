@@ -71,7 +71,6 @@ const PokemonDetailView = () => {
 
   if (!pokemon) return null;
 
-  // Find current evolution stage
   const getCurrentEvolutionStage = () => {
     if (!pokemon.evolution_chain) return -1;
     return pokemon.evolution_chain.findIndex(evo => evo.id === pokemon.id);
@@ -82,7 +81,7 @@ const PokemonDetailView = () => {
   return (
     <div className="container mx-auto p-4">
       <div className="bg-white rounded-lg shadow overflow-hidden">
-        {/* Header */}
+       
         <div className="bg-gray-100 p-6">
           <Link to="/" className="text-blue-500 hover:underline mb-4 inline-block">
             &larr; Back to List
@@ -138,7 +137,7 @@ const PokemonDetailView = () => {
           </div>
         </div>
         
-        {/* Navigation Tabs */}
+      
         <div className="border-b border-gray-200">
           <nav className="flex">
             <button
@@ -184,7 +183,6 @@ const PokemonDetailView = () => {
           </nav>
         </div>
         
-        {/* Content Based on Active Tab */}
         <div className="p-6">
           {activeTab === "stats" && (
             <div>
@@ -249,11 +247,11 @@ const PokemonDetailView = () => {
               <h2 className="text-xl font-semibold mb-4">Evolution Chain</h2>
               {pokemon.evolution_chain && pokemon.evolution_chain.length > 0 ? (
                 <div className="flex flex-col items-center">
-                  {/* Evolution chain visualization */}
+                
                   <div className="flex flex-wrap justify-center gap-2 md:gap-4 w-full">
                     {pokemon.evolution_chain.map((evo, index) => (
                       <div key={evo.id} className="flex flex-col items-center">
-                        {/* Arrow showing evolution direction */}
+                       
                         {index > 0 && (
                           <div className="flex items-center justify-center my-2 md:my-4 w-full">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" 
@@ -270,7 +268,7 @@ const PokemonDetailView = () => {
                           </div>
                         )}
                         
-                        {/* Pokémon card */}
+                     
                         <Link 
                           to={`/pokemon/${evo.id}`}
                           className={`block p-4 rounded-lg transition-all duration-200 
@@ -294,7 +292,7 @@ const PokemonDetailView = () => {
                     ))}
                   </div>
                   
-                  {/* Evolution details section */}
+                
                   {currentEvolutionStage >= 0 && (
                     <div className="mt-8 w-full max-w-2xl">
                       <h3 className="text-lg font-medium mb-3 text-gray-700">Evolution Details</h3>
