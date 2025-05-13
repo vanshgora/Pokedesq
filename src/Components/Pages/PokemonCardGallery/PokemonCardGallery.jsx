@@ -33,7 +33,6 @@ const FilterSummary = memo(({ totalShown, totalAvailable, selectedTypes, searchQ
   </div>
 ));
 
-// Memoized grid to avoid re-renders when pagination changes but not content
 const PokemonGrid = memo(({ pokemons }) => (
   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
     {pokemons.map(pokemon => (
@@ -42,7 +41,6 @@ const PokemonGrid = memo(({ pokemons }) => (
   </div>
 ));
 
-// Empty state component extracted for cleaner code
 const EmptyState = memo(({ onClearFilters }) => (
   <div className="flex justify-center items-center h-64 bg-white rounded-lg shadow-md p-8">
     <div className="text-center">
@@ -57,7 +55,6 @@ const EmptyState = memo(({ onClearFilters }) => (
   </div>
 ));
 
-// Loading state component extracted
 const LoadingState = memo(() => (
   <div className="flex justify-center items-center h-64">
     <p className="text-xl text-gray-500">Loading Pokémon...</p>
@@ -67,21 +64,18 @@ const LoadingState = memo(() => (
 function PokemonCardGallery() {
   const { state, dispatch } = usePokmonContext();
   
-  // Memoize the clear filters function to prevent recreating on every render
   const clearAllFilters = useCallback(() => {
     dispatch({
       type: "CLEAR_ALL_FILTERS"
     });
   }, [dispatch]);
   
-  // Memoize pagination calculation to avoid recalculating on every render
   const paginatedPokemons = useMemo(() => {
     const startIndex = (state.currentPage - 1) * state.itemsPerPage;
     const endIndex = startIndex + state.itemsPerPage;
     return state.pokemonsToDisplay.slice(startIndex, endIndex);
   }, [state.currentPage, state.itemsPerPage, state.pokemonsToDisplay]);
   
-  // Determine which component to render based on state
   const renderContent = () => {
     if (state.allPokemons.length === 0) {
       return <LoadingState />;

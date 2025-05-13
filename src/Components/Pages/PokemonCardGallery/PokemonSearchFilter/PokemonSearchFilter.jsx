@@ -4,8 +4,7 @@ import usePokmonContext from "../../../../Hooks/usePokemonContext";
 export default function PokemonSearchFilter() {
   const { state, dispatch } = usePokmonContext();
   const [searchQuery, setSearchQuery] = useState(state.searchQuery);
-  
-  // Update the local state if the context state changes
+
   useEffect(() => {
     setSearchQuery(state.searchQuery);
   }, [state.searchQuery]);
@@ -30,7 +29,6 @@ export default function PokemonSearchFilter() {
   
   const clearSearch = () => {
     setSearchQuery('');
-    // We don't need to dispatch here as it will be caught by the useEffect
   };
   
   return (

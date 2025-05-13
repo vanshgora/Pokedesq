@@ -18,7 +18,7 @@ export const addToFavorites = (pokemonId) => {
       localStorage.setItem(FAVORITES_KEY, JSON.stringify(updatedFavorites));
       return true;
     }
-    return false; // Already in favorites
+    return false;
   } catch (error) {
     console.error('Error adding to favorites:', error);
     return false;

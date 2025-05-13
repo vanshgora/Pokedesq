@@ -13,7 +13,6 @@ export default function Header() {
       }
     };
     
-    // Close mobile menu when resizing to desktop view
     const handleResize = () => {
       if (window.innerWidth >= 768 && mobileMenuOpen) {
         setMobileMenuOpen(false);
@@ -23,7 +22,6 @@ export default function Header() {
     window.addEventListener('scroll', handleScroll);
     window.addEventListener('resize', handleResize);
     
-    // Prevent scrolling when mobile menu is open
     if (mobileMenuOpen) {
       document.body.style.overflow = 'hidden';
     } else {
@@ -66,7 +64,6 @@ export default function Header() {
           </h1>
         </div>
         
-        {/* Desktop Navigation */}
         <nav className="hidden md:flex space-x-6">
           <a
             href="#"
@@ -90,7 +87,6 @@ export default function Header() {
           </a>
         </nav>
         
-        {/* Hamburger Menu Button with Animation */}
         <button 
           className={`md:hidden flex flex-col justify-center items-center w-8 h-8 focus:outline-none transition-all duration-200 ${mobileMenuOpen ? 'transform rotate-90' : ''}`}
           onClick={toggleMobileMenu}
@@ -102,7 +98,6 @@ export default function Header() {
         </button>
       </div>
       
-      {/* Mobile Menu Overlay */}
       <div 
         className={`fixed inset-0 z-40 bg-black bg-opacity-50 md:hidden transition-opacity duration-300 ${
           mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
@@ -110,7 +105,6 @@ export default function Header() {
         onClick={toggleMobileMenu}
       ></div>
       
-      {/* Mobile Menu Slide-in Panel */}
       <div 
         className={`fixed top-0 right-0 z-50 w-64 h-full bg-red-500 shadow-lg transform transition-transform duration-300 ease-in-out md:hidden ${
           mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'

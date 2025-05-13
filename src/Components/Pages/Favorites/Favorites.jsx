@@ -12,7 +12,7 @@ const Favorites = () => {
   const loadFavorites = () => {
     try {
       setLoading(true);
-      // Get favorite IDs from your existing service
+     
       const favoriteIds = getFavoritePokemon();
       
       if (favoriteIds.length === 0) {
@@ -21,14 +21,14 @@ const Favorites = () => {
         return;
       }
 
-      // Instead of fetching from API, use the context data
+
       if (state.allPokemons.length > 0) {
-        // Find matching Pokemon names from context based on IDs
+      
         const favoritePokemonNames = favoriteIds.map(id => {
-          // Find the Pokemon in context by ID
+  
           const pokemon = state.allPokemons.find(p => {
-            // Get ID either from details or from URL
-            const pokemonId = p.details?.id || parseInt(p.url?.split('/').filter(Boolean).pop());
+
+            const pokemonId = p?.id || parseInt(p.url?.split('/').filter(Boolean).pop());
             return pokemonId === parseInt(id);
           });
           
@@ -38,7 +38,7 @@ const Favorites = () => {
         setFavorites(favoritePokemonNames);
         setLoading(false);
       } else {
-        // If context data isn't loaded yet, fall back to original method
+        
         fetchPokemonNames(favoriteIds)
           .then(pokemonNames => {
             setFavorites(pokemonNames);
@@ -55,7 +55,7 @@ const Favorites = () => {
     }
   };
   
-  // Keep the original fetch method as fallback
+
   const fetchPokemonNames = async (ids) => {
     try {
       const promises = ids.map(id => 
@@ -88,7 +88,7 @@ const Favorites = () => {
       window.removeEventListener('storage', handleStorageChange);
       window.removeEventListener('focus', loadFavorites);
     };
-  }, [state.allPokemons]); // Added state.allPokemons as dependency to update when it changes
+  }, [state.allPokemons]);
   
   const handleStorageChange = (event) => {
     if (event.key === 'favorite_pokemon') {

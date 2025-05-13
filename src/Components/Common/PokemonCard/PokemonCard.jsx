@@ -26,7 +26,7 @@ const PokemonCard = ({ pokemonName }) => {
           description: pokemonData.description
         });
         setLoading(false);
-        // Check if this pokemon is already in favorites
+       
         setIsFavorited(isFavorite(pokemonData.id));
       } catch(error) {
         setLoading(false);
