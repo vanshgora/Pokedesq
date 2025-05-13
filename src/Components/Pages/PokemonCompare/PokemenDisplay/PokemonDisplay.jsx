@@ -1,6 +1,6 @@
 import { typeColors } from "../../../../utils/typeColors";
 
-export default function PokemonDisplay({ pokemon, side, setSelectedSide, setShowModal }) {
+export default function PokemonDisplay({ pokemon, side, setSelectedSide, setShowModal, opponent }) {
 
     const getStatBarWidth = (stat, maxStat = 255) => {
         const percentage = (stat / maxStat) * 100;
@@ -8,7 +8,6 @@ export default function PokemonDisplay({ pokemon, side, setSelectedSide, setShow
     };
 
     const getTypeColor = (type) => {
-
         return typeColors[type] || 'bg-gray-400';
     };
 
@@ -80,12 +79,10 @@ export default function PokemonDisplay({ pokemon, side, setSelectedSide, setShow
                             </div>
                             <div className="h-2 bg-gray-200 rounded-full mt-1 overflow-hidden">
                                 <div
-                                    className={`h-full ${stat.stat.name === 'hp' ? 'bg-green-500' :
-                                        stat.stat.name === 'attack' ? 'bg-red-500' :
-                                            stat.stat.name === 'defense' ? 'bg-blue-500' :
-                                                stat.stat.name === 'special-attack' ? 'bg-purple-500' :
-                                                    stat.stat.name === 'special-defense' ? 'bg-indigo-500' :
-                                                        'bg-yellow-500'}`}
+                                    className={`h-full ${Number(stat.base_stat) < Number(opponent.stats.find(s => s.stat.name === stat.stat.name).base_stat)
+                                        ? 'bg-red-500'
+                                        : 'bg-blue-500'
+                                    }`}
                                     style={{ width: getStatBarWidth(stat.base_stat) }}
                                 ></div>
                             </div>

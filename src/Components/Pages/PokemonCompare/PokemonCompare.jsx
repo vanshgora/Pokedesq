@@ -112,7 +112,7 @@ const PokemonComparison = () => {
       )}
       
       <div className="flex flex-col md:flex-row gap-4">
-        <PokemonDisplay pokemon={leftPokemon} side="left" setSelectedSide={setSelectedSide} setShowModal={setShowModal}/>
+        <PokemonDisplay pokemon={leftPokemon} side="left" setSelectedSide={setSelectedSide} setShowModal={setShowModal} opponent={rightPokemon}/>
         <div className="flex items-center justify-center">
           <div className="hidden md:flex h-12 w-12 bg-red-500 rounded-full text-white font-bold items-center justify-center text-2xl">
             VS
@@ -121,7 +121,7 @@ const PokemonComparison = () => {
             <span className="bg-red-500 text-white px-4 py-2 rounded-full font-bold">VS</span>
           </div>
         </div>
-        <PokemonDisplay pokemon={rightPokemon} side="right" setSelectedSide={setSelectedSide} setShowModal={setShowModal} />
+        <PokemonDisplay pokemon={rightPokemon} side="right" setSelectedSide={setSelectedSide} setShowModal={setShowModal} opponent={leftPokemon} />
       </div>
       
       {showModal && <PokemonSelector fetchPokemon={fetchPokemon} setShowModal={setShowModal} selectedSide={selectedSide} setLeftPokemon={setLeftPokemon} setRightPokemon={setRightPokemon} />}
