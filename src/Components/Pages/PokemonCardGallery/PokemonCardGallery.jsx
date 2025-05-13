@@ -6,7 +6,6 @@ import PokemonSearchFilter from './PokemonSearchFilter/PokemonSearchFilter';
 import PokemonSortOptions from './PokemonSortOptions/PokemonSortOptions';
 import PokemonPagination from './PokemonPagination/PokemonPagination';
 
-// Memoized filter summary component to prevent unnecessary re-renders
 const FilterSummary = memo(({ totalShown, totalAvailable, selectedTypes, searchQuery, onClearFilters }) => (
   <div className="text-gray-600 mb-4 flex flex-wrap items-center gap-2">
     <span>Showing {totalShown} of {totalAvailable} Pokémon</span>

@@ -9,6 +9,7 @@ import PokemonCardGallery from './Components/Pages/PokemonCardGallery/PokemonCar
 import Favorites from './Components/Pages/Favorites/Favorites.jsx';
 import PokemonDetailView from './Components/PokemonDetailView/PokemonDetailView.jsx';
 import NotFound from './Components/Pages/NotFound/NotFound.jsx';
+import PokemonComparison from './Components/Pages/PokemonCompare/PokemonCompare.jsx';
   
   const router = createBrowserRouter([
     {
@@ -18,6 +19,7 @@ import NotFound from './Components/Pages/NotFound/NotFound.jsx';
         { index: true, element: <PokemonCardGallery /> },
         { path: 'favorites', element: <Favorites/> },
         { path: 'pokemon/:id', element: <PokemonDetailView /> },
+        { path: 'compare', element: <PokemonComparison /> },
         { path: '404', element: <NotFound /> },
         { path: '*', element: <Navigate to="/404" replace /> },
       ],
