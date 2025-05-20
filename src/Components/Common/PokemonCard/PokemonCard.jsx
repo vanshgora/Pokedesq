@@ -26,14 +26,14 @@ const PokemonCard = ({ pokemonName }) => {
           description: pokemonData.description
         });
         setLoading(false);
-       
+
         setIsFavorited(isFavorite(pokemonData.id));
-      } catch(error) {
+      } catch (error) {
         setLoading(false);
         setError(error);
       }
     };
-    
+
     if (pokemonName) {
       fetchPokemon();
     }
@@ -42,7 +42,7 @@ const PokemonCard = ({ pokemonName }) => {
   const handleFavoriteToggle = (e) => {
     e.stopPropagation();
     if (!pokemon) return;
-    
+
     const result = toggleFavorite(pokemon.id);
     if (result) {
       setIsFavorited(!isFavorited);
@@ -50,16 +50,20 @@ const PokemonCard = ({ pokemonName }) => {
   };
 
   if (loading) return (
-    <div className="p-6 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md">
-      <p className="text-center text-gray-500">Loading Pokémon data...</p>
+    <div className="p-6 max-w-sm bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-md">
+      <p className="text-center text-gray-500 dark:text-gray-300">Loading Pokémon data...</p>
     </div>
+
   );
 
   if (error && !pokemon) return (
-    <div className="p-6 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md">
+    <div className="p-6 max-w-sm bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-md">
       <p className="text-center text-red-500">Error: {error}</p>
-      <p className="text-center text-gray-500 mt-2">No demo data available for this Pokémon</p>
+      <p className="text-center text-gray-500 dark:text-gray-300 mt-2">
+        No demo data available for this Pokémon
+      </p>
     </div>
+
   );
 
   if (!pokemon) return null;
@@ -73,11 +77,13 @@ const PokemonCard = ({ pokemonName }) => {
   };
 
   return (
-    <div className="max-w-sm bg-white rounded-xl overflow-hidden shadow-lg border border-gray-200 hover:shadow-xl cursor-pointer transition-shadow duration-300"
-    onClick={() => {
-      navigate('/pokemon/'+ pokemon.id);
-    }}>
-      <div className="bg-gray-100 p-4 flex justify-center">
+    <div
+      className="max-w-sm bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl cursor-pointer transition-shadow duration-300"
+      onClick={() => {
+        navigate('/pokemon/' + pokemon.id);
+      }}
+    >
+      <div className="bg-gray-100 dark:bg-gray-700 p-4 flex justify-center">
         <img
           src={pokemon.image || "/api/placeholder/200/200"}
           alt={pokemon.name}
@@ -86,11 +92,15 @@ const PokemonCard = ({ pokemonName }) => {
       </div>
       <div className="p-5">
         <div className="flex justify-between items-center mb-2">
-          <h2 className="text-2xl font-bold text-gray-800">{formatName(pokemon.name)}</h2>
-          <span className="text-gray-500 font-medium">{formatId(pokemon.id)}</span>
+          <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
+            {formatName(pokemon.name)}
+          </h2>
+          <span className="text-gray-500 dark:text-gray-300 font-medium">
+            {formatId(pokemon.id)}
+          </span>
         </div>
         <div className="mb-4 flex flex-wrap gap-2">
-          {pokemon.types.map(type => (
+          {pokemon.types.map((type) => (
             <span
               key={type.type.name}
               className={`${typeColors[type.type.name] || 'bg-gray-400'} text-white px-3 py-1 rounded-full text-xs font-semibold`}
@@ -99,7 +109,7 @@ const PokemonCard = ({ pokemonName }) => {
             </span>
           ))}
         </div>
-        <p className="text-gray-700 mb-3">
+        <p className="text-gray-700 dark:text-gray-300 mb-3">
           {expanded ? pokemon.description : `${pokemon.description.slice(0, 100)}...`}
         </p>
         <div className="flex justify-between items-center">
@@ -108,28 +118,31 @@ const PokemonCard = ({ pokemonName }) => {
               setExpanded(!expanded);
               e.stopPropagation();
             }}
-            className="text-blue-500 hover:text-blue-700 font-medium text-sm cursor-pointer"
+            className="text-blue-500 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium text-sm cursor-pointer"
           >
             {expanded ? 'Read less' : 'Read more'}
           </button>
-          
+
           <button
             onClick={handleFavoriteToggle}
-            className={`flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium cursor-pointer ${
-              isFavorited 
-                ? 'bg-red-100 text-red-600 hover:bg-red-200' 
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-            }`}
+            className={`flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium cursor-pointer ${isFavorited
+              ? 'bg-red-100 dark:bg-red-200 text-red-600 hover:bg-red-200 dark:hover:bg-red-300'
+              : 'bg-gray-100 dark:bg-gray-600 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-500'
+              }`}
           >
-            <svg 
-              xmlns="http://www.w3.org/2000/svg" 
-              viewBox="0 0 24 24" 
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
               fill={isFavorited ? "currentColor" : "none"}
-              stroke="currentColor" 
+              stroke="currentColor"
               className="w-4 h-4"
               strokeWidth={isFavorited ? "0" : "2"}
             >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
+              />
             </svg>
             {isFavorited ? 'Favorited' : 'Favorite'}
           </button>
