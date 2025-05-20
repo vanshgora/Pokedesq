@@ -95,6 +95,16 @@ export default function Header() {
           >
             Compare
           </a>
+          <a
+            href="#"
+            className="text-white hover:text-yellow-200 font-medium transition-colors"
+            onClick={(e) => {
+              e.preventDefault();
+              navigateTo('/explore-pokeworld');
+            }}
+          >
+            Pokeworld
+          </a>
         </nav>
         
         <button 
@@ -164,6 +174,16 @@ export default function Header() {
               }}
             >
               Compare
+            </a>
+            <a
+              href="#"
+              className="block py-2 px-4 text-white hover:bg-red-600 rounded transition-colors text-lg font-medium"
+              onClick={(e) => {
+                e.preventDefault();
+                navigateTo('/explore-pokeworld');
+              }}
+            >
+              Pokeworld
             </a>
           </nav>
           

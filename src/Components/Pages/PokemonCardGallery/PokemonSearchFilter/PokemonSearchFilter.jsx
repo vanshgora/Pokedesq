@@ -9,7 +9,6 @@ export default function PokemonSearchFilter() {
     setSearchQuery(state.searchQuery);
   }, [state.searchQuery]);
   
-  // Debounce the search input to avoid too frequent context updates
   useEffect(() => {
     const debounceTimeout = setTimeout(() => {
       if (searchQuery !== state.searchQuery) {
