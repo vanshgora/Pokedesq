@@ -3,7 +3,7 @@ import axios from "axios";
 const getInitialPokemons = async () => {
   const query = `
     query getPokemons {
-      pokemon_v2_pokemon(limit: 300) {
+      pokemon_v2_pokemon {
       id
         name
         pokemon_v2_pokemontypes {
