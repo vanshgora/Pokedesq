@@ -104,7 +104,7 @@ const PokemonDetailView = () => {
                   pokemon.sprites.front_default
                 }
                 alt={pokemon.name}
-                className="w-64 h-64 object-contain mx-auto"
+                className="w-64 h-64 object-contain mx-auto floating-img shadow-image"
               />
             </div>
 
@@ -321,7 +321,7 @@ const PokemonDetailView = () => {
                           <img
                             src={evo.image || "/api/placeholder/96/96"}
                             alt={evo.name}
-                            className="w-20 h-20 md:w-24 md:h-24 mx-auto object-contain"
+                            className="w-20 h-20 md:w-24 md:h-24 mx-auto object-contain  "
                           />
                           <div className="mt-2 font-medium text-center text-gray-800 dark:text-gray-200">
                             {formatName(evo.name)}

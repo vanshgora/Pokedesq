@@ -1,0 +1,19 @@
+.shadow-image{
+    filter: drop-shadow(5px 5px 3px rgba(0, 0, 0, 0.5));
+}
+
+.floating-img {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
